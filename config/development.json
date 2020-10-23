@@ -12,7 +12,11 @@
             "legendastv": {
                 "baseURL": "http:http://legendas.tv",
                 "timeout": 10000,
-                "rejectUnauthorized": false
+                "rejectUnauthorized": false,
+                "credentials":{
+                   "login": "user",
+                   "password": 1234
+                }
             }
         },
         "queues": {
