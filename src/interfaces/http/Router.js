@@ -11,13 +11,14 @@ module.exports = (ctx) => {
         .use(express.urlencoded({ extended: true }))
         .use(compression());
 
-    ApiRouter.use('/legendatv', handle(ctx.legendastvController.router));
-
-    ApiRouter.use('/healthcheck', handle(ctx.healthCheckMiddleware));
+    ApiRouter.use('/github', handle(ctx.githubController.router));
 
     DefaultRouter.use('/api', ApiRouter);
-    DefaultRouter.use('/*', ctx.notFoundMiddleware);
-    DefaultRouter.use(ctx.httpErrorMiddleware);
+
+    DefaultRouter.use('/*',  (req, res, next) => {
+        const title = 'NotFound';
+        return res.status(404).json({ error: title, details:'address not found' });
+    });
 
     return DefaultRouter;
 };

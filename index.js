@@ -4,12 +4,19 @@ const startApplication = async () => {
 
     const app = container.resolve('application');
 
-    app
-        .start()
-        .catch((error) => {
-            app.logger.error(error.stack);
-            process.exit();
-        });
+    if(process.env.NODE_INTERFACE !== 'console') {
+        app
+            .start()
+            .catch((error) => {
+                console.log(error.stack);
+                process.exit();
+            });
+    }
+    else {
+        console.log('Application Started on console mode');
+        container.resolve('console');
+    }
+
 };
 
 startApplication();

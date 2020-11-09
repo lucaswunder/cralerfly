@@ -1,7 +1,6 @@
 class Application {
-    constructor ({ server, logger }) {
+    constructor ({ server }) {
         this.server = server;
-        this.logger = logger;
     }
 
     async start() {
