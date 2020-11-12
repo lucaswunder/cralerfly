@@ -30,10 +30,10 @@ async function scrape(user) {
     await page.click('[name="commit"]');
     await page.screenshot({ path: 'loginpage.png' });
 
-    await page.waitForNavigation({ waitUntil: 'load' });
+    await page.waitForNavigation({ waitUntil: 'domcontentloaded' });
     await page.screenshot({ path: 'loggedpage.png' });
 
-    await page.goto(`${website}${user}`);
+    await page.goto(`${website}${user}`, { waitUntil:'' });
     await page.screenshot({ path: 'userPage.png' });
 
     const items = [];
@@ -42,7 +42,6 @@ async function scrape(user) {
             [data[index].name]: await page.$eval(data[index].selector, item => item.textContent).catch(()=> '')
         });
     }
-
     browser.close();
     console.log('Application finish...');
     return items;

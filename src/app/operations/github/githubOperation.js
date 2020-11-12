@@ -3,6 +3,7 @@ module.exports = ({ config, puppeterClient }) => ({
         const { application: { screenshot_path }, GITHUB_URL, GITHUB_USER, GITHUB_PASSWORD } = config;
 
         const browser = await puppeterClient.launch({
+            // headless:false,
             defaultViewport:{
                 height: 800,
                 width: 1200
@@ -25,23 +26,20 @@ module.exports = ({ config, puppeterClient }) => ({
         await page.type('#password', GITHUB_PASSWORD);
 
         await page.click('[name="commit"]');
-        await page.screenshot({ path: `${screenshot_path}loginpage.png` });
+        page.screenshot({ path: `${screenshot_path}loginpage.png` });
 
-        await page.waitForNavigation({ waitUntil: 'load' });
-        await page.screenshot({ path: `${screenshot_path}loggedpage.png` });
-
-        await page.goto(`${GITHUB_URL}${username}`);
+        await page.goto(`${GITHUB_URL}${username}`,  { waitUntil:'domcontentloaded' });
         await page.screenshot({ path: `${screenshot_path}userPage.png` });
 
-        const items = {};
+        const info = {};
         await Promise.all(selectorsInfo.map(async item => {
-            items[item.name] = await page.$eval(item.selector, item => item.textContent).catch(()=> '');
+            info[item.name] = await page.$eval(item.selector, item => item.textContent).catch(()=>'');
         }));
 
         browser.close();
         console.log('Headless Browser finish job');
         return {
-            'User_Info': items
+            'User_Info': info
         };
     }
 });
